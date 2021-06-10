@@ -1,0 +1,13 @@
+# Artifacts
+build
+migrations
+types/truffle-contracts
+
+# Lib
+node_modules
+
+# IDE
+.vscode
+
+# Logs
+*.log
