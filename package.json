@@ -1,13 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "generate-types": "rm -r types/truffle-contracts && typechain --target=truffle-v5 build/contracts/**/*.json",
+    "generate-types": "(rm -r types/truffle-contracts || true) && typechain --target=truffle-v5 client/src/contracts/**/*.json && (rm -r types/web3-v1-contracts || true) && typechain --target=web3-v1 client/src/contracts/**/*.json",
     "postinstall": "truffle compile && yarn generate-types",
     "migrate": "tsc -p ./tsconfig.migrate.json --outDir ./migrations && truffle migrate",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@typechain/truffle-v5": "^5.0.0",
+    "@typechain/web3-v1": "^3.0.0",
     "@types/bn.js": "^5.1.0",
     "@types/chai": "^4.2.18",
     "@types/mocha": "^8.2.2",

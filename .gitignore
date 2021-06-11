@@ -1,13 +1,16 @@
 # Artifacts
 build
+client/src/contracts
 migrations
 types/truffle-contracts
+types/web3-v1-contracts
 
 # Lib
 node_modules
 
 # IDE
 .vscode
+.idea
 
 # Logs
 *.log
