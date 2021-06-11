@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import { forwardRef, useImperativeHandle, useState } from 'react'
+import { ArrowDown } from 'react-bootstrap-icons'
 import { sha3 } from 'web3-utils'
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 
 export type WheelRef = {
   spinToIndex: (index: number) => void
-} | null
+}
 
 export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
   const radius = 250
@@ -26,8 +27,18 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
     },
   }))
 
+  const arrowSize = radius / 6
   return (
-    <div>
+    <div style={{ overflow: 'hidden' }}>
+      <div style={{ position: 'relative', top: arrowSize * 0.3, zIndex: 2 }}>
+        <ArrowDown
+          width={radius * 2}
+          height={arrowSize}
+          x={radius}
+          size={arrowSize}
+          style={{ transform: 'rotate(6deg)' }}
+        />
+      </div>
       <svg
         width={radius * 2} height={radius * 2}
         style={{
