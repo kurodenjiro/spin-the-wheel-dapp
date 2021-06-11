@@ -6,4 +6,8 @@ contract Casino {
     uint prize = msg.value / 2;
     payable(msg.sender).transfer(prize);
   }
+
+  function getProfit() public view returns (uint) {
+    return address(this).balance;
+  }
 }
