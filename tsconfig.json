@@ -8,7 +8,6 @@
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitThis": true,
-    "noPropertyAccessFromIndexSignature": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
   }
