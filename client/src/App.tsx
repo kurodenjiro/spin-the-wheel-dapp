@@ -1,14 +1,15 @@
-import { Field, Form, Formik } from 'formik'
 import { createContext, FC, useContext } from 'react'
 import { useQuery } from 'react-query'
 import Web3 from 'web3'
-import { fromWei, toWei } from 'web3-utils'
+import { fromWei } from 'web3-utils'
 import { Casino as CasinoType } from '../../types/web3-v1-contracts/Casino'
+import { CasinoWheelPage } from './pages/CasinoWheelPage'
 import Casino from './contracts/Casino.json'
 import { getWeb3 } from './getWeb3'
 
-const Web3Context = createContext(undefined as unknown as Web3)
-const AccountContext = createContext(undefined as unknown as string)
+export const Web3Context = createContext(undefined as unknown as Web3)
+export const AccountContext = createContext(undefined as unknown as string)
+export const CasinoContext = createContext(undefined as unknown as CasinoType)
 
 export const App: FC = () => {
   const web3Loader = useQuery('web3', async () => {
@@ -49,19 +50,11 @@ export const App: FC = () => {
   return (
     <Web3Context.Provider value={web3}>
       <AccountContext.Provider value={account}>
-        <div>Your address: {account}</div>
-        <DisplayBalance />
-        <Formik initialValues={{ amount: 0 }} onSubmit={async ({ amount }, { resetForm }) => {
-          await casino.methods.spinWheel().send({ from: account, value: toWei(amount.toString()) })
-          resetForm()
-        }}>
-          {({ isSubmitting }) => (
-            <Form>
-              <Field type="number" name="amount" />
-              <button type="submit" disabled={isSubmitting}>Spin the wheel</button>
-            </Form>
-          )}
-        </Formik>
+        <CasinoContext.Provider value={casino}>
+          <div>Your address: {account}</div>
+          <DisplayBalance />
+          <CasinoWheelPage />
+        </CasinoContext.Provider>
       </AccountContext.Provider>
     </Web3Context.Provider>
   )
