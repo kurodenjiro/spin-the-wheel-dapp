@@ -21,6 +21,7 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
     spinToIndex(index: number) {
       const desiredAngle = sectorSize * index + sectorSize / 2 +
         Math.random() * sectorSize + 360 * Math.floor(Math.random() * 6)
+      // Reset angle (angle % 360 == 0) and add desiredAngle
       setAngle(a => a - a % 360 + 360 + desiredAngle)
     },
   }))

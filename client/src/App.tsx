@@ -1,11 +1,10 @@
-import { createContext, FC, useContext } from 'react'
+import { createContext, FC } from 'react'
 import { useQuery } from 'react-query'
 import Web3 from 'web3'
-import { fromWei } from 'web3-utils'
 import { Casino as CasinoType } from '../../types/web3-v1-contracts/Casino'
-import { CasinoWheelPage } from './pages/CasinoWheelPage'
 import Casino from './contracts/Casino.json'
 import { getWeb3 } from './getWeb3'
+import { CasinoWheelPage } from './pages/CasinoWheelPage'
 
 export const Web3Context = createContext(undefined as unknown as Web3)
 export const AccountContext = createContext(undefined as unknown as string)
@@ -51,35 +50,9 @@ export const App: FC = () => {
     <Web3Context.Provider value={web3}>
       <AccountContext.Provider value={account}>
         <CasinoContext.Provider value={casino}>
-          <div>Your address: {account}</div>
-          <DisplayBalance />
           <CasinoWheelPage />
         </CasinoContext.Provider>
       </AccountContext.Provider>
     </Web3Context.Provider>
   )
-}
-
-
-const DisplayBalance: FC = () => {
-  const web3 = useContext(Web3Context)
-  const account = useContext(AccountContext)
-
-  const balance = useQuery(['balance', account], () => {
-    return web3.eth.getBalance(account)
-  })
-
-  if (balance.isLoading) {
-    return <div>Loading balance...</div>
-  }
-
-  if (balance.isError) {
-    return <div>Error getting balance!</div>
-  }
-
-  if (balance.isIdle) {
-    return <div>Idle...</div>
-  }
-
-  return <div>Your balance: {fromWei(balance.data)}</div>
 }
