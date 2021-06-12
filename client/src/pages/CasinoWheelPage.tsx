@@ -1,13 +1,13 @@
 import BN from 'bn.js'
 import { Form, Formik } from 'formik'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
-import { Button, Card, Container, InputGroup } from 'react-bootstrap'
+import { Card, Container, InputGroup } from 'react-bootstrap'
 import { useQueryClient } from 'react-query'
 import { Subscription } from 'web3-core-subscriptions'
 import { fromWei, toWei } from 'web3-utils'
 import * as yup from 'yup'
 import { AccountContext, CasinoContext } from '../App'
-import { TextField } from '../components/form-fields'
+import { FormButton, TextField } from '../components/form-fields'
 import { Header } from '../components/Header'
 import { Wheel, WheelRef } from '../components/Wheel'
 import { shuffleExceptAt } from '../utils/collections'
@@ -71,7 +71,7 @@ export const CasinoWheelPage: FC = () => {
                       placeholder="Enter your bet"
                       append={<InputGroup.Text>ETH</InputGroup.Text>}
                     />
-                    <Button type="submit" disabled={isSubmitting}>Spin the wheel</Button>
+                    <FormButton>Spin the wheel</FormButton>
                   </Form>
                 )}
               </Formik>

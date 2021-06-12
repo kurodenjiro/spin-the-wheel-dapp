@@ -1,12 +1,11 @@
-import { FieldHookConfig, useField } from 'formik'
+import { FieldHookConfig, useField, useFormikContext } from 'formik'
 import { FC, ReactElement } from 'react'
-import { Form, InputGroup } from 'react-bootstrap'
+import { Button, Form, InputGroup, Spinner } from 'react-bootstrap'
 
 type TextFieldProps = FieldHookConfig<string> & {
   label: string
   append?: ReactElement
 }
-
 
 export const TextField: FC<TextFieldProps> = ({ label, append, ...props }) => {
   const [field, meta] = useField(props)
@@ -25,5 +24,20 @@ export const TextField: FC<TextFieldProps> = ({ label, append, ...props }) => {
         {meta.error}
       </Form.Control.Feedback>
     </Form.Group>
+  )
+}
+
+
+export const FormButton: FC = ({ children }) => {
+  const { isSubmitting } = useFormikContext()
+  return (
+    <Button
+      type="submit"
+      disabled={isSubmitting}
+    >
+      {isSubmitting && <Spinner size="sm" animation="grow" />}
+      {' '}
+      {children}
+    </Button>
   )
 }
