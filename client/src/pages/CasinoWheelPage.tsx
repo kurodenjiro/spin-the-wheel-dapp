@@ -10,6 +10,7 @@ import { AccountContext, CasinoContext } from '../App'
 import { TextField } from '../components/form-fields'
 import { Header } from '../components/Header'
 import { Wheel, WheelRef } from '../components/Wheel'
+import { shuffleExceptAt } from '../utils/collections'
 
 
 const casinoWheelSchema = yup.object({
@@ -33,7 +34,9 @@ export const CasinoWheelPage: FC = () => {
       }
       const wonPrizeIndex = new BN(data.returnValues.wonPrizeIndex).toNumber()
       const potentialPrizes = data.returnValues.potentialPrizes.map(p => fromWei(p))
-      setPrizes(potentialPrizes)
+      // Shuffle all prizes except the prize at index `wonPrizeIndex`
+      const shuffledPrizes = shuffleExceptAt(potentialPrizes, wonPrizeIndex)
+      setPrizes(shuffledPrizes)
       await wheelRef.current?.spinToIndex(wonPrizeIndex, 5)
       await queryClient.invalidateQueries('balance')
     }) as unknown as Subscription<unknown>

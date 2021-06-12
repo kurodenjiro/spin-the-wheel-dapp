@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import { ArrowDown } from 'react-bootstrap-icons'
 import { sha3 } from 'web3-utils'
+import { randomInt } from '../utils/random'
 import { sleep } from '../utils/time'
 
 type Props = {
@@ -22,7 +23,7 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
   useImperativeHandle(ref, () => ({
     async spinToIndex(index, duration) {
       const desiredAngle = sectorSize * index - sectorSize / 2 +
-        Math.random() * sectorSize + 360 * Math.floor(Math.random() * 6)
+        Math.random() * sectorSize + 360 * randomInt(5, 8)
       // Reset angle (angle % 360 == 0) and add desiredAngle
       setAngle(a => a - a % 360 + 360 + desiredAngle)
       setDuration(duration)
