@@ -7,7 +7,7 @@ export const Header: FC = () => {
   const account = useContext(AccountContext)
 
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="dark" variant="dark" sticky="top">
       <Navbar.Brand>Casino</Navbar.Brand>
       <Nav className="ml-auto">
         <Navbar.Text>Your account: {account}</Navbar.Text>
