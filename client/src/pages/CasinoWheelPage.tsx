@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import { Form, Formik } from 'formik'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
-import { Button, Container } from 'react-bootstrap'
+import { Button, Card, Container, InputGroup } from 'react-bootstrap'
 import { useQueryClient } from 'react-query'
 import { Subscription } from 'web3-core-subscriptions'
 import { fromWei, toWei } from 'web3-utils'
@@ -48,24 +48,38 @@ export const CasinoWheelPage: FC = () => {
   return (
     <>
       <Header />
-      <Container className="mt-4">
-        <Formik
-          initialValues={{ amount: '' }}
-          validationSchema={casinoWheelSchema}
-          onSubmit={async ({ amount }, { resetForm }) => {
-            await casino.methods.spinWheel().send({ from: account, value: toWei(amount) })
-            resetForm()
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <TextField name="amount" />
-              <Button type="submit" disabled={isSubmitting}>Spin the wheel</Button>
-            </Form>
-          )}
-        </Formik>
-        <div className="d-flex justify-content-center">
-          <Wheel ref={wheelRef} prizes={prizes} />
+      <Container className="mt-4 d-flex justify-content-center">
+        <div style={{ maxWidth: '700px' }}>
+          <Card>
+            <Card.Header as="h3">
+              Spin the Wheel! Enter amount and spin
+            </Card.Header>
+            <Card.Body>
+              <Formik
+                initialValues={{ amount: '' }}
+                validationSchema={casinoWheelSchema}
+                onSubmit={async ({ amount }, { resetForm }) => {
+                  await casino.methods.spinWheel().send({ from: account, value: toWei(amount) })
+                  resetForm()
+                }}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <TextField
+                      name="amount"
+                      label="Bet amount"
+                      placeholder="Enter your bet"
+                      append={<InputGroup.Text>ETH</InputGroup.Text>}
+                    />
+                    <Button type="submit" disabled={isSubmitting}>Spin the wheel</Button>
+                  </Form>
+                )}
+              </Formik>
+              <div className="d-flex justify-content-center">
+                <Wheel ref={wheelRef} prizes={prizes} />
+              </div>
+            </Card.Body>
+          </Card>
         </div>
       </Container>
     </>
