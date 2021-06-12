@@ -63,7 +63,7 @@ export const CasinoWheelPage: FC = () => {
                   resetForm()
                 }}
               >
-                {({ isSubmitting }) => (
+                {() => (
                   <Form>
                     <TextField
                       name="amount"

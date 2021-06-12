@@ -1,5 +1,6 @@
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import { CaretDownFill } from 'react-bootstrap-icons'
+import spinToWinImg from '../assets/spin-to-win.png'
 import { randomInt } from '../utils/random'
 import { sleep } from '../utils/time'
 
@@ -16,7 +17,6 @@ const SECTOR_COLORS = [
   '#EC0E24',
   '#28B046',
   '#0453EA',
-  '#ECDA1E',
   '#EE2F0B',
   '#881391',
 ]
@@ -42,13 +42,14 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
 
   const arrowSize = radius / 6
   const outlineCircleStrokeWidth = 15
+  const strokeColor = '#F1D585'
   return (
     <div style={{ overflow: 'hidden', position: 'relative', width, height }}>
       <div style={{ position: 'absolute', zIndex: 2 }}>
         <CaretDownFill
           width={width}
           x={radius}
-          fill="black"
+          fill={strokeColor}
           size={arrowSize}
         />
       </div>
@@ -69,14 +70,16 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
                   transform={`rotate(${-90 + i * sectorSize})`}
                 >
                   <path
-                    stroke="black"
+                    stroke={strokeColor}
                     strokeWidth="2"
                     fill={color}
                     d={getSectorPath(0, 0, radius, -sectorSize / 2, sectorSize - sectorSize / 2)}
                   />
                   <text
-                    x={radius * 0.6}
+                    x={radius * 0.5}
+                    y={radius / 8 * 0.4}  // Relative to fontSize
                     fontSize={radius / 8}
+                    fill="white"
                   >
                     {prize}
                   </text>
@@ -89,8 +92,16 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
             cy="0"
             r={radius - outlineCircleStrokeWidth / 2}
             strokeWidth={outlineCircleStrokeWidth}
-            stroke="black"
+            stroke={strokeColor}
             fill="transparent"
+          />
+          <image
+            xlinkHref={spinToWinImg}
+            width={width}
+            height={height}
+            x={-radius}
+            y={-radius}
+            transform="scale(0.4)"
           />
         </g>
       </svg>
