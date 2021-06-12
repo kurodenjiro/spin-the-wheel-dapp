@@ -64,7 +64,9 @@ export const CasinoWheelPage: FC = () => {
             </Form>
           )}
         </Formik>
-        <Wheel ref={wheelRef} prizes={prizes} />
+        <div className="d-flex justify-content-center">
+          <Wheel ref={wheelRef} prizes={prizes} />
+        </div>
       </Container>
     </>
   )

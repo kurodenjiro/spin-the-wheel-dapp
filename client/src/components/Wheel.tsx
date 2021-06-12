@@ -1,7 +1,5 @@
-import BN from 'bn.js'
 import { forwardRef, useImperativeHandle, useState } from 'react'
-import { ArrowDown } from 'react-bootstrap-icons'
-import { sha3 } from 'web3-utils'
+import { CaretDownFill } from 'react-bootstrap-icons'
 import { randomInt } from '../utils/random'
 import { sleep } from '../utils/time'
 
@@ -13,8 +11,19 @@ export type WheelRef = {
   spinToIndex: (index: number, duration: number) => Promise<void>
 }
 
+const SECTOR_COLORS = [
+  '#19C0FC',
+  '#EC0E24',
+  '#28B046',
+  '#0453EA',
+  '#ECDA1E',
+  '#EE2F0B',
+  '#881391',
+]
+
 export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
   const radius = 250
+  const width = radius * 2, height = radius * 2
   const sectorSize = 360 / prizes.length
 
   const [angle, setAngle] = useState(0)
@@ -32,47 +41,57 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
   }))
 
   const arrowSize = radius / 6
+  const outlineCircleStrokeWidth = 15
   return (
-    <div style={{ overflow: 'hidden' }}>
-      <div style={{ position: 'relative', top: arrowSize * 0.3, zIndex: 2 }}>
-        <ArrowDown
-          width={radius * 2}
-          height={arrowSize}
+    <div style={{ overflow: 'hidden', position: 'relative', width, height }}>
+      <div style={{ position: 'absolute', zIndex: 2 }}>
+        <CaretDownFill
+          width={width}
           x={radius}
+          fill="black"
           size={arrowSize}
-          style={{ transform: 'rotate(1deg)' }}
         />
       </div>
       <svg
-        width={radius * 2} height={radius * 2}
+        width={width} height={height}
         style={{
           transition: `all ${duration}s cubic-bezier(0.3,-0.05,0,1)`,
           transform: `rotate(${-angle}deg)`,
         }}
       >
-        <g transform={`translate(${radius}, ${radius})`} strokeWidth="2">
-          {prizes.map((prize, i) => {
-            const color = '#' + new BN(sha3(i.toString())!).toString('hex').substring(0, 6)
-            return (
-              <g
-                key={`${prize}${i}`}
-                transform={`rotate(${-90 + i * sectorSize})`}
-              >
-                <path
-                  stroke="black"
-                  strokeWidth="2"
-                  fill={color}
-                  d={getSectorPath(0, 0, radius, -sectorSize / 2, sectorSize - sectorSize / 2)}
-                />
-                <text
-                  x={radius * 0.6}
-                  fontSize={radius / 8}
+        <g transform={`translate(${radius}, ${radius})`}>
+          <g strokeWidth="2">
+            {prizes.map((prize, i) => {
+              const color = SECTOR_COLORS[i % SECTOR_COLORS.length]
+              return (
+                <g
+                  key={`${prize}${i}`}
+                  transform={`rotate(${-90 + i * sectorSize})`}
                 >
-                  {prize}
-                </text>
-              </g>
-            )
-          })}
+                  <path
+                    stroke="black"
+                    strokeWidth="2"
+                    fill={color}
+                    d={getSectorPath(0, 0, radius, -sectorSize / 2, sectorSize - sectorSize / 2)}
+                  />
+                  <text
+                    x={radius * 0.6}
+                    fontSize={radius / 8}
+                  >
+                    {prize}
+                  </text>
+                </g>
+              )
+            })}
+          </g>
+          <circle
+            cx="0"
+            cy="0"
+            r={radius - outlineCircleStrokeWidth / 2}
+            strokeWidth={outlineCircleStrokeWidth}
+            stroke="black"
+            fill="transparent"
+          />
         </g>
       </svg>
     </div>
