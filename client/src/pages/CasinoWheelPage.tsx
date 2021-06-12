@@ -23,7 +23,7 @@ export const CasinoWheelPage: FC = () => {
 
   const queryClient = useQueryClient()
 
-  const [prizes, setPrizes] = useState<string[]>([])
+  const [prizes, setPrizes] = useState(['1', '2', '3'])
   const wheelRef = useRef<WheelRef>(null)
 
   useEffect(() => {
