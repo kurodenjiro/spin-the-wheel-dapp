@@ -2,13 +2,14 @@ import BN from 'bn.js'
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import { ArrowDown } from 'react-bootstrap-icons'
 import { sha3 } from 'web3-utils'
+import { sleep } from '../utils/time'
 
 type Props = {
-  prizes: number[]
+  prizes: string[]
 }
 
 export type WheelRef = {
-  spinToIndex: (index: number) => void
+  spinToIndex: (index: number, duration: number) => Promise<void>
 }
 
 export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
@@ -16,14 +17,16 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
   const sectorSize = 360 / prizes.length
 
   const [angle, setAngle] = useState(0)
-  const duration = 5 // seconds
+  const [duration, setDuration] = useState(0) // seconds
 
   useImperativeHandle(ref, () => ({
-    spinToIndex(index: number) {
-      const desiredAngle = sectorSize * index + sectorSize / 2 +
+    async spinToIndex(index, duration) {
+      const desiredAngle = sectorSize * index - sectorSize / 2 +
         Math.random() * sectorSize + 360 * Math.floor(Math.random() * 6)
       // Reset angle (angle % 360 == 0) and add desiredAngle
       setAngle(a => a - a % 360 + 360 + desiredAngle)
+      setDuration(duration)
+      await sleep(duration * 1000)
     },
   }))
 
@@ -36,14 +39,14 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
           height={arrowSize}
           x={radius}
           size={arrowSize}
-          style={{ transform: 'rotate(6deg)' }}
+          style={{ transform: 'rotate(1deg)' }}
         />
       </div>
       <svg
         width={radius * 2} height={radius * 2}
         style={{
           transition: `all ${duration}s cubic-bezier(0.3,-0.05,0,1)`,
-          transform: `rotate(${angle}deg)`,
+          transform: `rotate(${-angle}deg)`,
         }}
       >
         <g transform={`translate(${radius}, ${radius})`} strokeWidth="2">
@@ -51,7 +54,7 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
             const color = '#' + new BN(sha3(i.toString())!).toString('hex').substring(0, 6)
             return (
               <g
-                key={i}
+                key={`${prize}${i}`}
                 transform={`rotate(${-90 + i * sectorSize})`}
               >
                 <path
@@ -61,7 +64,6 @@ export const Wheel = forwardRef<WheelRef, Props>(({ prizes }, ref) => {
                   d={getSectorPath(0, 0, radius, -sectorSize / 2, sectorSize - sectorSize / 2)}
                 />
                 <text
-                  rotate={90}
                   x={radius * 0.6}
                   fontSize={radius / 8}
                 >

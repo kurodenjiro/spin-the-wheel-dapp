@@ -9,6 +9,9 @@ export const DisplayBalance: FC = () => {
 
   const balance = useQuery(['balance', account], () => {
     return web3.eth.getBalance(account)
+  }, {
+    // Metamask steals window focus. Don't refetch automatically.
+    refetchOnWindowFocus: false,
   })
 
   if (balance.isLoading) {

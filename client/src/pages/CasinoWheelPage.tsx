@@ -1,7 +1,10 @@
+import BN from 'bn.js'
 import { Form, Formik } from 'formik'
-import { FC, useContext, useRef } from 'react'
+import { FC, useContext, useEffect, useRef, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
-import { toWei } from 'web3-utils'
+import { useQueryClient } from 'react-query'
+import { Subscription } from 'web3-core-subscriptions'
+import { fromWei, toWei } from 'web3-utils'
 import * as yup from 'yup'
 import { AccountContext, CasinoContext } from '../App'
 import { TextField } from '../components/form-fields'
@@ -17,21 +20,37 @@ export const CasinoWheelPage: FC = () => {
   const account = useContext(AccountContext)
   const casino = useContext(CasinoContext)
 
-  const prizes = [1, 2, 3, 4, 5]
+  const queryClient = useQueryClient()
 
+  const [prizes, setPrizes] = useState<string[]>([])
   const wheelRef = useRef<WheelRef>(null)
+
+  useEffect(() => {
+    const subscription = casino.events.WheelSpin(async (error, data) => {
+      if (error != null) {
+        console.error(error)
+        return
+      }
+      const wonPrizeIndex = new BN(data.returnValues.wonPrizeIndex).toNumber()
+      const potentialPrizes = data.returnValues.potentialPrizes.map(p => fromWei(p))
+      setPrizes(potentialPrizes)
+      await wheelRef.current?.spinToIndex(wonPrizeIndex, 5)
+      await queryClient.invalidateQueries('balance')
+    }) as unknown as Subscription<unknown>
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [casino.events, queryClient])
 
   return (
     <>
       <Header />
       <Container className="mt-4">
         <Formik
-          initialValues={{ amount: '0' }}
+          initialValues={{ amount: '' }}
           validationSchema={casinoWheelSchema}
           onSubmit={async ({ amount }, { resetForm }) => {
             await casino.methods.spinWheel().send({ from: account, value: toWei(amount) })
-            // TODO: calculate index in the smart contract
-            wheelRef.current?.spinToIndex(Math.floor(Math.random() * prizes.length))
             resetForm()
           }}
         >
