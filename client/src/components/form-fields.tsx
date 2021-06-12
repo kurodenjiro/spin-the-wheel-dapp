@@ -19,10 +19,10 @@ export const TextField: FC<TextFieldProps> = ({ label, append, ...props }) => {
           isInvalid={meta.touched && meta.error != null}
         />
         {append && <InputGroup.Append>{append}</InputGroup.Append>}
+        <Form.Control.Feedback type="invalid">
+          {meta.error}
+        </Form.Control.Feedback>
       </InputGroup>
-      <Form.Control.Feedback type="invalid">
-        {meta.error}
-      </Form.Control.Feedback>
     </Form.Group>
   )
 }
