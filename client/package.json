@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://olehmisar.github.io/spin-the-wheel-dapp/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -25,6 +26,9 @@
     "web3-core-subscriptions": "^1.3.6",
     "web3-utils": "^1.3.6",
     "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
