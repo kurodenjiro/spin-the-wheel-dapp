@@ -7,3 +7,7 @@ Place a bet, spin the wheel, and win your prize! The smart contract is deployed 
 
  This is by no means a real project. Just a test what I can build on the blockchain technology.
  
+## TODO:
+- [ ] Integrate ERC20 tokens
+- [ ] Better prize generation
+- [ ] More beautiful interface
