@@ -12,9 +12,8 @@ cd client
 yarn build
 ```
 
-## deploy
+## deploy:client
 ```bash
-maid migrate
 cd client
 yarn gh-pages -d build
 ```

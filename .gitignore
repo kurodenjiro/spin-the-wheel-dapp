@@ -5,6 +5,9 @@ migrations
 types/truffle-contracts
 types/web3-v1-contracts
 
+# Environment
+env.js
+
 # Lib
 node_modules
 

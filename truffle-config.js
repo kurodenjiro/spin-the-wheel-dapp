@@ -1,7 +1,9 @@
 const path = require('path')
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 require("ts-node").register({
   files: true,
 })
+const env = require('./env')
 
 module.exports = {
   // Uncommenting the defaults below
@@ -16,6 +18,12 @@ module.exports = {
       host: "127.0.0.1",
       port: 7545,
       network_id: "*"
+    },
+    ropsten: {
+      provider: () => new HDWalletProvider(env.ROPSTEN_PRIVATE_KEY, env.INFURA.ROPSTEN_ENDPOINT),
+      network_id: 3,
+      //make sure this gas allocation isn't over 4M, which is the max
+      gas: 4000000,
     },
   },
   compilers: {
