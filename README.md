@@ -9,5 +9,5 @@ Place a bet, spin the wheel, and win your prize! The smart contract is deployed 
  
 ## TODO:
 - [ ] Integrate ERC20 tokens
-- [ ] Better prize generation
+- [x] Better prize generation
 - [ ] More beautiful interface
