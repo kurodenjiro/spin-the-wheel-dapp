@@ -23,6 +23,9 @@ contract Casino {
     emit WheelSpin(msg.sender, prizes, index);
   }
 
+  receive() external payable {
+  }
+
   function getProfit() public view returns (uint) {
     return address(this).balance;
   }
