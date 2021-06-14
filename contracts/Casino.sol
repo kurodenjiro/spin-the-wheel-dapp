@@ -5,17 +5,18 @@ contract Casino {
   event WheelSpin(address player, uint[] potentialPrizes, uint wonPrizeIndex);
 
   function spinWheel() public payable {
-    uint[] memory prizes = new uint[](10);
-    for (uint i = 0; i < prizes.length; i++) {
-      // TODO: this should be multiplied by 2.
-      uint possiblePrize = (msg.value / prizes.length * (i + 1)); // * 2;
-      uint sub = msg.value / 1000;
-      if (possiblePrize > sub) {
-        // Subtract some value from prizes to gain profit.
-        possiblePrize -= sub;
-      }
-      prizes[i] = possiblePrize;
-    }
+    uint bet = msg.value;
+    uint[] memory prizes = new uint[](9);
+    // TODO: refactor this mess.
+    prizes[0] = bet * 15 / 100;
+    prizes[1] = bet * 25 / 100;
+    prizes[2] = bet * 50 / 100;
+    prizes[3] = bet * 75 / 100;
+    prizes[4] = bet * 75 / 100;
+    prizes[5] = bet * 125 / 100;
+    prizes[6] = bet * 150 / 100;
+    prizes[7] = bet * 175 / 100;
+    prizes[8] = bet * 200 / 100;
     uint index = random(prizes) % prizes.length;
     uint prize = prizes[index];
     payable(msg.sender).transfer(prize);
