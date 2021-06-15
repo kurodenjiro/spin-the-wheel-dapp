@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "@openzeppelin/contracts": "^4.1.0",
     "@truffle/hdwallet-provider": "^1.4.0",
     "@typechain/truffle-v5": "^5.0.0",
     "@typechain/web3-v1": "^3.0.0",
